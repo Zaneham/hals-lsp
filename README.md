@@ -179,6 +179,18 @@ Licensed under the Apache Licence, Version 2.0. See [LICENSE](LICENSE) for detai
 
 Contributions are welcome! Please open an issue or pull request on GitHub.
 
+## Related Projects
+
+If you've found yourself oddly satisfied by a language that handles vectors and matrices natively because astronauts shouldn't have to think about loop indices during re-entry, you might appreciate:
+
+- **[JOVIAL J73 LSP](https://github.com/Zaneham/jovial-lsp)** - The US Air Force's real-time language. Same era, same contractors (Intermetrics did both), different altitude ceiling. JOVIAL keeps aircraft from crashing into the ground; HAL/S keeps spacecraft from crashing into the ground at considerably higher speeds.
+
+- **[CMS-2 LSP](https://github.com/Zaneham/cms2-lsp)** - The US Navy's tactical language. For when you need real-time computing but prefer to stay attached to a planet. Aegis cruisers and submarines run this. No astronauts required.
+
+- **[CORAL 66 LSP](https://github.com/Zaneham/coral66-lsp)** - The British equivalent. Developed at the Royal Radar Establishment, Malvern, presumably whilst discussing the weather. Powers Tornado aircraft and, one assumes, runs perfectly well in drizzle.
+
+- **[Minuteman Guidance Computer Emulator](https://github.com/Zaneham/Minuteman-computer-emulator)** - An emulator for the D17B/D37C guidance computers in Minuteman ICBMs. Also goes to space, technically. Just the once. And rather more quickly.
+
 ## Acknowledgements
 
 - NASA (National Aeronautics and Space Administration)
