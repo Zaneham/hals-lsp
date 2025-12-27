@@ -1,0 +1,102 @@
+{
+  "name": "hals-lsp",
+  "displayName": "HAL/S NASA Space Shuttle Language",
+  "description": "Language Server Protocol support for HAL/S - NASA's Space Shuttle flight software programming language",
+  "version": "1.0.0",
+  "author": "Zane Hambly",
+  "license": "Apache-2.0",
+  "publisher": "ZaneHambly",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zaneham/HAL-S-LSP"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters"
+  ],
+  "keywords": [
+    "hal/s",
+    "hals",
+    "hal-s",
+    "nasa",
+    "space shuttle",
+    "aerospace",
+    "flight software",
+    "intermetrics",
+    "real-time",
+    "embedded",
+    "legacy"
+  ],
+  "activationEvents": [
+    "onLanguage:hals"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "hals",
+        "aliases": [
+          "HAL/S",
+          "HALS",
+          "HAL-S",
+          "hal/s"
+        ],
+        "extensions": [
+          ".hal",
+          ".hals",
+          ".h"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hals",
+        "scopeName": "source.hals",
+        "path": "./syntaxes/hals.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "HAL/S",
+      "properties": {
+        "hals.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to Python interpreter for LSP server"
+        },
+        "hals.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to hals_lsp_server.py (leave empty to use bundled)"
+        },
+        "hals.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces communication between VS Code and the HAL/S language server"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.0.0"
+  }
+}

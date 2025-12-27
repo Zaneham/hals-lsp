@@ -1,0 +1,172 @@
+{
+  "name": "HAL/S",
+  "scopeName": "source.hals",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#types" },
+    { "include": "#builtins" },
+    { "include": "#operators" },
+    { "include": "#labels" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.hals",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.hals",
+          "match": "^C.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.single.hals",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.hals",
+              "match": "''"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.double.hals",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.hals",
+              "match": "\"\""
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.hals",
+          "match": "\\b\\d+\\.\\d+([Ee][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.exponential.hals",
+          "match": "\\b\\d+[Ee][+-]?\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.binary.hals",
+          "match": "\\b[01]+B\\b"
+        },
+        {
+          "name": "constant.numeric.hex.hals",
+          "match": "\\b[0-9A-Fa-f]+H\\b"
+        },
+        {
+          "name": "constant.numeric.integer.hals",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.program.hals",
+          "match": "\\b(PROGRAM|PROCEDURE|FUNCTION|TASK|COMPOOL|UPDATE|CLOSE|RETURN)\\b"
+        },
+        {
+          "name": "keyword.control.flow.hals",
+          "match": "\\b(IF|THEN|ELSE|DO|END|FOR|TO|BY|WHILE|UNTIL|REPEAT|EXIT|GO|GOTO|CASE)\\b"
+        },
+        {
+          "name": "keyword.control.realtime.hals",
+          "match": "\\b(SCHEDULE|WAIT|SIGNAL|PRIORITY|TERMINATE|CANCEL|SET|RESET|ON|OFF|ERROR|DEPENDENT|IGNORE)\\b"
+        },
+        {
+          "name": "keyword.other.declaration.hals",
+          "match": "\\b(DECLARE|CONSTANT|INITIAL|STATIC|AUTOMATIC|TEMPORARY|DENSE|ALIGNED|RIGID|REMOTE|ACCESS|ASSIGN|NAME|LOCK|EXCLUSIVE|LATCHED|REPLACE|STRUCTURE|ARRAY)\\b"
+        },
+        {
+          "name": "keyword.other.io.hals",
+          "match": "\\b(READ|READALL|WRITE|FILE)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.hals",
+          "match": "\\b(NOT|AND|OR|CAT|MOD)\\b"
+        },
+        {
+          "name": "constant.language.boolean.hals",
+          "match": "\\b(TRUE|FALSE)\\b"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.hals",
+          "match": "\\b(INTEGER|SCALAR|VECTOR|MATRIX|BOOLEAN|CHARACTER|BIT|EVENT|SINGLE|DOUBLE)\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.hals",
+          "match": "\\b(ABS|CEILING|FLOOR|TRUNCATE|ROUND|ODD|SIGN|MAX|MIN|SUM|PROD|SHL|SHR|SIZE|LENGTH|INDEX|MIDVAL|RANDOM|RANDOMG|DATE|RUNTIME|CLOCKTIME|PRIO|NEXTIME)\\b"
+        },
+        {
+          "name": "support.function.math.hals",
+          "match": "\\b(SIN|COS|TAN|ARCSIN|ARCCOS|ARCTAN|ARCTAN2|SINH|COSH|TANH|EXP|LOG|SQRT)\\b"
+        },
+        {
+          "name": "support.function.vector.hals",
+          "match": "\\b(TRANSPOSE|TRACE|DET|INVERSE|IDENTITY|UNIT|ABVAL|DOT|CROSS)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.hals",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.arithmetic.hals",
+          "match": "\\*\\*|\\*|/|\\+|-"
+        },
+        {
+          "name": "keyword.operator.comparison.hals",
+          "match": "<=|>=|<|>|¬=|~=|\\^="
+        },
+        {
+          "name": "keyword.operator.logical.hals",
+          "match": "¬|~|\\^|&|\\|\\||\\|"
+        }
+      ]
+    },
+    "labels": {
+      "patterns": [
+        {
+          "name": "entity.name.label.hals",
+          "match": "^\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*:"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.hals",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_$]*\\b"
+        }
+      ]
+    }
+  }
+}
