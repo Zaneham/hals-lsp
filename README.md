@@ -189,7 +189,9 @@ If you've found yourself oddly satisfied by a language that handles vectors and 
 
 - **[CORAL 66 LSP](https://github.com/Zaneham/coral66-lsp)** - The British equivalent. Developed at the Royal Radar Establishment, Malvern, presumably whilst discussing the weather. Powers Tornado aircraft and, one assumes, runs perfectly well in drizzle.
 
-- **[Minuteman Guidance Computer Emulator](https://github.com/Zaneham/Minuteman-computer-emulator)** - An emulator for the D17B/D37C guidance computers in Minuteman ICBMs. Also goes to space, technically. Just the once. And rather more quickly.
+- **[Minuteman Guidance Computer Emulator](https://github.com/Zaneham/minuteman-emu)** - An emulator for the D17B/D37C guidance computers in Minuteman ICBMs. Also goes to space, technically. Just the once. And rather more quickly.
+
+- **[Minuteman Assembler](https://github.com/Zaneham/minuteman-assembler)** - Two-pass assembler for the D17B/D37C. For the other way of getting to space. No heat tiles required. No return trip either.
 
 ## Acknowledgements
 
