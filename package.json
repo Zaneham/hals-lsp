@@ -2,7 +2,7 @@
   "name": "hals-lsp",
   "displayName": "HAL/S NASA Space Shuttle Language",
   "description": "Language Server Protocol support for HAL/S - NASA's Space Shuttle flight software programming language",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Zane Hambly",
   "license": "Apache-2.0",
   "publisher": "ZaneHambly",

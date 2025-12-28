@@ -80,7 +80,7 @@
       "patterns": [
         {
           "name": "keyword.control.program.hals",
-          "match": "\\b(PROGRAM|PROCEDURE|FUNCTION|TASK|COMPOOL|UPDATE|CLOSE|RETURN)\\b"
+          "match": "\\b(PROGRAM|PROCEDURE|FUNCTION|TASK|COMPOOL|PROCESS|BLOCK|UPDATE|CLOSE|RETURN|CALL|ENTRY|EXTERNAL|INLINE)\\b"
         },
         {
           "name": "keyword.control.flow.hals",
@@ -92,7 +92,7 @@
         },
         {
           "name": "keyword.other.declaration.hals",
-          "match": "\\b(DECLARE|CONSTANT|INITIAL|STATIC|AUTOMATIC|TEMPORARY|DENSE|ALIGNED|RIGID|REMOTE|ACCESS|ASSIGN|NAME|LOCK|EXCLUSIVE|LATCHED|REPLACE|STRUCTURE|ARRAY)\\b"
+          "match": "\\b(DECLARE|CONSTANT|INITIAL|STATIC|AUTOMATIC|TEMPORARY|DENSE|ALIGNED|RIGID|REMOTE|ACCESS|ASSIGN|NAME|LOCK|EXCLUSIVE|LATCHED|REPLACE|STRUCTURE|ARRAY|REENTRANT)\\b"
         },
         {
           "name": "keyword.other.io.hals",
