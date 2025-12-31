@@ -2,23 +2,40 @@
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/ZaneHambly.hals-lsp?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=ZaneHambly.hals-lsp)
 
-Language Server Protocol (LSP) implementation for **HAL/S** (High-order Assembly Language/Shuttle), the real-time aerospace programming language that powered NASA's Space Shuttle flight software.
+Language Server Protocol (LSP) implementation for **HAL/S** (High-order Assembly Language/Shuttle), the programming language that flew the Space Shuttle for thirty years.
 
-## About HAL/S
+When astronauts needed to know where they were, how fast they were going, and whether they were about to die, HAL/S code gave them the answer. The language handled vectors and matrices natively because nobody should be debugging pointer arithmetic during re-entry.
 
-HAL/S was developed by Intermetrics in the early 1970s under contract to NASA. It was specifically designed for programming onboard computers in real-time aerospace applications. The language powered approximately 85% of the Space Shuttle's Primary Avionics Software System (PASS).
+## What is HAL/S?
 
-HAL/S was used in:
+HAL/S was developed by Intermetrics in the early 1970s under contract to NASA. The requirement was simple: a programming language for computers that absolutely could not crash, running software that absolutely had to work, in an environment where "have you tried turning it off and on again" was not an option.
 
-- **Space Shuttle** Primary Avionics Software System (PASS)
-- **Space Shuttle** Backup Flight Software (BFS)
-- **Space Station Freedom** (precursor to ISS) software development
-- **Various NASA spacecraft** guidance and control systems
+The language powered approximately 85% of the Space Shuttle's Primary Avionics Software System (PASS). The other 15% was backup software, written by a completely separate team in a completely different way, so that a bug in the primary system wouldn't also be a bug in the backup. NASA took reliability seriously.
 
-The language is notable for its support of:
-- Native vector and matrix operations
-- Real-time scheduling primitives
-- Multi-line mathematical notation format
+### What HAL/S Flew
+
+| System | Role |
+|--------|------|
+| **Primary Avionics Software System (PASS)** | Main flight control, guidance, navigation for all 135 Shuttle missions |
+| **Backup Flight Software (BFS)** | Independent backup system, never needed in flight |
+| **Space Station Freedom** | Precursor to ISS, software development used HAL/S |
+| **Various NASA spacecraft** | Guidance and control systems |
+
+The Shuttle flew from 1981 to 2011. That's thirty years of launches, orbital operations, and re-entries. Every time you saw a Shuttle land, HAL/S code was calculating the glide slope. Every time astronauts docked with a space station, HAL/S code was managing the approach. Every time the Shuttle came home, HAL/S code was keeping it from becoming a very expensive meteor.
+
+## The Multi-Line Format
+
+HAL/S has a feature you won't find in any other language: source code that looks like mathematical notation.
+
+```
+E           2
+M    X = Y
+S     I
+```
+
+The E line is exponents. The M line is the main expression. The S line is subscripts. This represents X = Y²ᵢ (Y subscript I, squared).
+
+NASA's reasoning: astronauts and flight controllers were trained in mathematics, not programming. If the source code looked like the equations in the flight manuals, fewer mistakes would be made. Whether this was true is debatable. That it was attempted is remarkable.
 
 ## Features
 
@@ -40,6 +57,7 @@ The language is notable for its support of:
 1. Install the extension from the VS Code Marketplace
 2. Ensure Python 3.8+ is installed and available in PATH
 3. Open any `.hal` or `.hals` file
+4. Your orbital mechanics code now has syntax highlighting
 
 ## File Extensions
 
@@ -50,18 +68,18 @@ The language is notable for its support of:
 
 ## Language Overview
 
-HAL/S uses an ALGOL-like syntax with uppercase keywords:
+HAL/S looks like ALGOL had a baby with linear algebra. Vectors and matrices are first-class types. You can multiply a matrix by a vector and it just works. This is what happens when rocket scientists design a programming language.
 
 ```hals
 C HAL/S NAVIGATION EXAMPLE
 C FOR SPACE SHUTTLE FLIGHT SOFTWARE
 
 SHUTTLE_NAV: PROGRAM;
-    /* Declare constants */
+    /* Constants */
     DECLARE PI CONSTANT(3.14159265);
     DECLARE G CONSTANT(9.80665);
 
-    /* Declare variables */
+    /* The interesting types */
     DECLARE ALTITUDE SCALAR;
     DECLARE VELOCITY VECTOR(3);
     DECLARE POSITION VECTOR(3);
@@ -69,19 +87,20 @@ SHUTTLE_NAV: PROGRAM;
     DECLARE ENGINE_ON BOOLEAN;
     DECLARE ABORT_FLAG EVENT;
 
-    /* Arrays */
+    /* Sensor data from the IMU */
     DECLARE SENSOR_DATA ARRAY(10) SCALAR;
 
-    /* Navigation loop */
+    /* Navigation loop - runs every 40ms during ascent */
 NAV_LOOP:
     DO WHILE ENGINE_ON;
-        /* Update position */
-        POSITION = POSITION + VELOCITY * 0.1;
+        /* Vector addition - no loops needed */
+        POSITION = POSITION + VELOCITY * 0.04;
 
-        /* Check altitude */
+        /* Check altitude - if too low, we have a problem */
         IF ALTITUDE < 100.0 THEN
             SIGNAL ABORT_FLAG;
 
+        /* The astronauts probably prefer we keep running */
         GO TO NAV_LOOP;
     END;
 
@@ -93,16 +112,17 @@ COMPUTE_THRUST: SCALAR FUNCTION(MASS, ACCEL);
     DECLARE ACCEL VECTOR(3);
     DECLARE THRUST SCALAR;
 
+    /* ABVAL is magnitude - returns sqrt(x² + y² + z²) */
     THRUST = MASS * ABVAL(ACCEL);
     RETURN THRUST;
 CLOSE COMPUTE_THRUST;
 
-/* Real-time task */
+/* Real-time task for continuous navigation updates */
 NAV_TASK: TASK;
     DECLARE STATE VECTOR(6);
 
     DO WHILE TRUE;
-        WAIT FOR 0.1 SECONDS;
+        WAIT FOR 0.04 SECONDS;  /* 25 Hz update rate */
         /* Update navigation state */
         STATE = STATE;
     END;
@@ -111,46 +131,37 @@ CLOSE NAV_TASK;
 
 ### Key Syntax Elements
 
-- **Comments:** `C` in column 1, or `/* ... */`
+- **Comments:** `C` in column 1 for full-line, or `/* ... */`
 - **Multi-line format:** E (exponent), S (subscript), M (main) line prefixes
-- **Assignment:** `=`
+- **Assignment:** `=` (straightforward)
 - **Program units:** `label: PROGRAM;`, `label: PROCEDURE;`, etc.
 - **Type specifiers:**
-  - `INTEGER` - Integer values
-  - `SCALAR` - Floating-point values
-  - `VECTOR(n)` - n-element vectors
-  - `MATRIX(r,c)` - r×c matrices
-  - `BOOLEAN` - Logical values
-  - `CHARACTER(n)` - Character strings
-  - `BIT(n)` - Bit strings
-  - `EVENT` - Synchronisation events
+  - `INTEGER` for whole numbers
+  - `SCALAR` for floating-point (they called it SCALAR, not FLOAT)
+  - `VECTOR(n)` for n-element vectors
+  - `MATRIX(r,c)` for r×c matrices
+  - `BOOLEAN` for logical values
+  - `CHARACTER(n)` for character strings
+  - `BIT(n)` for bit strings
+  - `EVENT` for synchronisation events
 - **Real-time keywords:** `SCHEDULE`, `WAIT`, `SIGNAL`, `PRIORITY`, `TERMINATE`
-- **Logical operators:** `NOT`, `AND`, `OR`
 
-### Multi-line Format
-
-HAL/S supports a unique multi-line format for mathematical notation:
-
-```
-E           2
-M    X = Y
-S     I
-```
-
-This represents X = Y² (Y subscript I squared), allowing source code to resemble mathematical equations.
+The `COMPOOL` construct lets you define shared data across program units. On the Shuttle, this was how the guidance computer, the flight control computer, and the systems management computer all agreed on where the vehicle was and what it was doing.
 
 ## Documentation Sources
 
 This extension was developed using official NASA documentation:
 
 1. **HAL/S Language Specification** (NASA, 1976)
-   - Primary language reference
+   - The primary reference, written by people who were actually going to fly this code
 
 2. **HAL/S Programmer's Guide** (Intermetrics, 1978)
-   - Programming techniques and examples
+   - How to actually use the language, with examples
 
 3. **Programming in HAL/S** (NASA, 1978)
-   - Tutorial and programming manual
+   - Tutorial for new programmers joining the Shuttle software team
+
+NASA's Shuttle software team was famous for their rigour. The HAL/S documentation reflects this. Every edge case is specified. Every ambiguity is resolved. When your code might kill astronauts, you don't leave things to interpretation.
 
 ## Configuration
 
@@ -164,12 +175,22 @@ This extension was developed using official NASA documentation:
 
 - Visual Studio Code 1.75.0 or later
 - Python 3.8 or later
+- Optional: an understanding of orbital mechanics
 
 ## Known Limitations
 
-- Multi-line E/S/M format parsing is simplified (subscript/exponent lines are currently skipped)
+- Multi-line E/S/M format parsing is simplified (exponent and subscript lines are currently handled as comments)
 - The parser handles core HAL/S constructs but may not cover all implementation-specific extensions
 - Some advanced COMPOOL patterns may not be fully supported
+- Cannot actually calculate orbital trajectories (this is a syntax highlighter, not a flight computer)
+
+## Why This Matters
+
+The Space Shuttle is retired. The last one flew in 2011. But HAL/S matters for the same reason we study Latin: understanding where we came from helps us understand where we're going.
+
+The Shuttle software team achieved something remarkable: millions of lines of code that flew 135 missions without a software-caused failure. They did this with 1970s tools, 1970s hardware, and 1970s management practices that would horrify modern agile consultants. They wrote specifications. They reviewed code. They tested exhaustively. They took responsibility.
+
+Modern spacecraft don't use HAL/S. But the lessons of how the Shuttle software was built are still relevant. This LSP exists so that people who want to study that history can at least read the code.
 
 ## Licence
 
@@ -179,30 +200,38 @@ Licensed under the Apache Licence, Version 2.0. See [LICENSE](LICENSE) for detai
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or pull request on GitHub.
+Contributions are welcome. Particularly:
+- Syntax patterns from real HAL/S code
+- Corrections from people who actually worked on Shuttle software
+- Better handling of the multi-line E/S/M format
+
+If you worked on the Shuttle software, your knowledge would be invaluable. The code is archived. The experience of writing it is not.
 
 ## Related Projects
 
-If you've found yourself oddly satisfied by a language that handles vectors and matrices natively because astronauts shouldn't have to think about loop indices during re-entry, you might appreciate:
+If you've found yourself oddly moved by a language that handles vectors natively because astronauts shouldn't debug pointer arithmetic during re-entry:
 
-- **[JOVIAL J73 LSP](https://github.com/Zaneham/jovial-lsp)** - The US Air Force's real-time language. Same era, same contractors (Intermetrics did both), different altitude ceiling. JOVIAL keeps aircraft from crashing into the ground; HAL/S keeps spacecraft from crashing into the ground at considerably higher speeds.
+- **[JOVIAL J73 LSP](https://github.com/Zaneham/jovial-lsp)** - Same era, same contractors (Intermetrics built both), different altitude ceiling. JOVIAL keeps aircraft from crashing. HAL/S kept spacecraft from crashing. Similar problem, higher stakes.
 
-- **[CMS-2 LSP](https://github.com/Zaneham/cms2-lsp)** - The US Navy's tactical language. For when you need real-time computing but prefer to stay attached to a planet. Aegis cruisers and submarines run this. No astronauts required.
+- **[CMS-2 LSP](https://github.com/Zaneham/cms2-lsp)** - The US Navy's tactical language. For when you need real-time computing but prefer to stay attached to a planet. Aegis cruisers and submarines. No astronauts required.
 
-- **[CORAL 66 LSP](https://github.com/Zaneham/coral66-lsp)** - The British equivalent. Developed at the Royal Radar Establishment, Malvern, presumably whilst discussing the weather. Powers Tornado aircraft and, one assumes, runs perfectly well in drizzle.
+- **[CORAL 66 LSP](https://github.com/Zaneham/coral66-lsp)** - The British equivalent. Developed at the Royal Radar Establishment, Malvern. Powers Tornado aircraft. Presumably runs perfectly well in drizzle.
 
-- **[Minuteman Guidance Computer Emulator](https://github.com/Zaneham/minuteman-emu)** - An emulator for the D17B/D37C guidance computers in Minuteman ICBMs. Also goes to space, technically. Just the once. And rather more quickly.
+- **[CHILL LSP](https://github.com/Zaneham/chill-lsp)** - For telephone switches. Also real-time, also critical, also forgotten. Different infrastructure, same era.
 
-- **[Minuteman Assembler](https://github.com/Zaneham/minuteman-assembler)** - Two-pass assembler for the D17B/D37C. For the other way of getting to space. No heat tiles required. No return trip either.
+- **[Minuteman Guidance Computer Emulator](https://github.com/Zaneham/minuteman-emu)** - Another way of getting to space. Just the once. Rather more quickly. No heat tiles required. No return trip either.
 
 ## Contact
 
 Questions? Found an issue? Worked on the actual Shuttle software and want to tell me everything I got wrong?
 
-zanehambly@gmail.com - Ground control is standing by. All transmissions welcome.
+zanehambly@gmail.com
+
+Ground control is standing by. All transmissions welcome. Response time faster than an orbital period.
 
 ## Acknowledgements
 
-- NASA (National Aeronautics and Space Administration)
-- Intermetrics, Inc. (original HAL/S compiler developers)
-- Space Shuttle Program flight software engineers
+- NASA, for shooting people into space and bringing them back
+- Intermetrics, for building a language that was up to the job
+- The Shuttle software team, for thirty years of flawless operation
+- Everyone who documented their work so thoroughly that we can still learn from it
