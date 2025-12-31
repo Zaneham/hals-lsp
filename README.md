@@ -1,5 +1,7 @@
 # HAL/S Language Support for Visual Studio Code
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/ZaneHambly.hals-lsp?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=ZaneHambly.hals-lsp)
+
 Language Server Protocol (LSP) implementation for **HAL/S** (High-order Assembly Language/Shuttle), the real-time aerospace programming language that powered NASA's Space Shuttle flight software.
 
 ## About HAL/S
