@@ -4,7 +4,7 @@
 
 Language Server Protocol (LSP) implementation for **HAL/S** (High-order Assembly Language/Shuttle), the programming language that flew the Space Shuttle for thirty years.
 
-When astronauts needed to know where they were, how fast they were going, and whether they were about to die, HAL/S code gave them the answer. The language handled vectors and matrices natively because nobody should be debugging pointer arithmetic during re-entry.
+When astronauts needed to know where they were, how fast they were going, and whether they were going to make it home, HAL/S code gave them the answer. The language handled vectors and matrices natively because nobody should be debugging pointer arithmetic during re-entry.
 
 ## What is HAL/S?
 
@@ -21,7 +21,7 @@ The language powered approximately 85% of the Space Shuttle's Primary Avionics S
 | **Space Station Freedom** | Precursor to ISS, software development used HAL/S |
 | **Various NASA spacecraft** | Guidance and control systems |
 
-The Shuttle flew from 1981 to 2011. That's thirty years of launches, orbital operations, and re-entries. Every time you saw a Shuttle land, HAL/S code was calculating the glide slope. Every time astronauts docked with a space station, HAL/S code was managing the approach. Every time the Shuttle came home, HAL/S code was keeping it from becoming a very expensive meteor.
+The Shuttle flew from 1981 to 2011. That's thirty years of launches, orbital operations, and re-entries. Every time you saw a Shuttle land, HAL/S code was calculating the glide slope. Every time astronauts docked with a space station, HAL/S code was managing the approach. Every time the Shuttle came home, HAL/S code was bringing it down safely.
 
 ## The Multi-Line Format
 
@@ -161,7 +161,7 @@ This extension was developed using official NASA documentation:
 3. **Programming in HAL/S** (NASA, 1978)
    - Tutorial for new programmers joining the Shuttle software team
 
-NASA's Shuttle software team was famous for their rigour. The HAL/S documentation reflects this. Every edge case is specified. Every ambiguity is resolved. When your code might kill astronauts, you don't leave things to interpretation.
+NASA's Shuttle software team was famous for their rigour. The HAL/S documentation reflects this. Every edge case is specified. Every ambiguity is resolved. When lives depend on your code, you don't leave things to interpretation.
 
 ## Configuration
 
