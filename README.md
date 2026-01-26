@@ -74,67 +74,58 @@ HAL/S looks like ALGOL had a baby with linear algebra. Vectors and matrices are 
 C HAL/S NAVIGATION EXAMPLE
 C FOR SPACE SHUTTLE FLIGHT SOFTWARE
 
-SHUTTLE_NAV: PROGRAM;
-    /* Constants */
-    DECLARE PI CONSTANT(3.14159265);
-    DECLARE G CONSTANT(9.80665);
+SHUTTLE_NAV:
+PROGRAM;
+   DECLARE PI CONSTANT(3.14159265);
+   DECLARE G CONSTANT(9.80665);                    /* Gravity constant */
+   DECLARE ALTITUDE SCALAR;
+   DECLARE VELOCITY VECTOR(3);
+   DECLARE POSITION VECTOR(3);
+   DECLARE ATTITUDE MATRIX(3, 3);
+   DECLARE ENGINE_ON BOOLEAN;
+   DECLARE ABORT_FLAG EVENT;
+   DECLARE SENSOR_DATA ARRAY(10) SCALAR;          /* IMU data */
 
-    /* The interesting types */
-    DECLARE ALTITUDE SCALAR;
-    DECLARE VELOCITY VECTOR(3);
-    DECLARE POSITION VECTOR(3);
-    DECLARE ATTITUDE MATRIX(3,3);
-    DECLARE ENGINE_ON BOOLEAN;
-    DECLARE ABORT_FLAG EVENT;
-
-    /* Sensor data from the IMU */
-    DECLARE SENSOR_DATA ARRAY(10) SCALAR;
-
-    /* Navigation loop - runs every 40ms during ascent */
-NAV_LOOP:
-    DO WHILE ENGINE_ON;
-        /* Vector addition - no loops needed */
-        POSITION = POSITION + VELOCITY * 0.04;
-
-        /* Check altitude - if too low, we have a problem */
-        IF ALTITUDE < 100.0 THEN
-            SIGNAL ABORT_FLAG;
-
-        /* The astronauts probably prefer we keep running */
-        GO TO NAV_LOOP;
-    END;
-
-CLOSE SHUTTLE_NAV;
-
-/* Guidance function */
-COMPUTE_THRUST: SCALAR FUNCTION(MASS, ACCEL);
-    DECLARE MASS SCALAR;
-    DECLARE ACCEL VECTOR(3);
-    DECLARE THRUST SCALAR;
-
-    /* ABVAL is magnitude - returns sqrt(x² + y² + z²) */
-    THRUST = MASS * ABVAL(ACCEL);
-    RETURN THRUST;
+C GUIDANCE FUNCTION - NESTED INSIDE PROGRAM
+COMPUTE_THRUST:
+FUNCTION(MASS, ACCEL) SCALAR;
+   DECLARE MASS SCALAR;
+   DECLARE ACCEL VECTOR(3);
+   DECLARE THRUST SCALAR;
+   THRUST = MASS ABVAL(ACCEL);                    /* Spaces for multiply */
+   RETURN THRUST;
 CLOSE COMPUTE_THRUST;
 
-/* Real-time task for continuous navigation updates */
-NAV_TASK: TASK;
-    DECLARE STATE VECTOR(6);
-
-    DO WHILE TRUE;
-        WAIT FOR 0.04 SECONDS;  /* 25 Hz update rate */
-        /* Update navigation state */
-        STATE = STATE;
-    END;
+C REAL-TIME TASK FOR NAVIGATION UPDATES
+NAV_TASK:
+TASK;
+   DECLARE STATE VECTOR(6);
+   DO WHILE TRUE;
+      WAIT 0.04;                                  /* 25 Hz update rate */
+      STATE = STATE;
+   END;
 CLOSE NAV_TASK;
+
+C NAVIGATION LOOP - RUNS DURING ASCENT
+NAV_LOOP:
+   DO WHILE ENGINE_ON;
+      POSITION = POSITION + VELOCITY 0.04;        /* Vector math */
+      IF ALTITUDE < 100.0 THEN
+         SIGNAL ABORT_FLAG;
+      REPEAT NAV_LOOP;
+   END;
+CLOSE SHUTTLE_NAV;
 ```
 
 ### Key Syntax Elements
 
-- **Comments:** `C` in column 1 for full-line, or `/* ... */`
+- **Column 1:** Special - only M (main), C (comment), D (directive), E (exponent), S (subscript) allowed
+- **Comments:** `C` in column 1 for full-line, or `/* ... */` inline
+- **Multiplication:** Use spaces, not `*` (e.g., `A B` means A × B)
 - **Multi-line format:** E (exponent), S (subscript), M (main) line prefixes
 - **Assignment:** `=` (straightforward)
-- **Program units:** `label: PROGRAM;`, `label: PROCEDURE;`, etc.
+- **Program units:** `label:` on one line, `PROGRAM;` on next. One compilation unit per file, or nest inside PROGRAM.
+- **WAIT:** `WAIT 0.1` not `WAIT FOR 0.1 SECONDS` (units are implementation-dependent)
 - **Type specifiers:**
   - `INTEGER` for whole numbers
   - `SCALAR` for floating-point (they called it SCALAR, not FLOAT)
@@ -235,3 +226,4 @@ Ground control is standing by. All transmissions welcome. Response time faster t
 - Intermetrics, for building a language that was up to the job
 - The Shuttle software team, for thirty years of flawless operation
 - Everyone who documented their work so thoroughly that we can still learn from it
+- Ron Burkey and the [Virtual AGC Project](https://virtualagc.github.io/virtualagc/) for syntax corrections validated against an actual HAL/S compiler
